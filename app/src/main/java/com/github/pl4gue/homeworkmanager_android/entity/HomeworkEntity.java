@@ -5,6 +5,10 @@ package com.github.pl4gue.homeworkmanager_android.entity;
  *         Created on 04.11.17.
  */
 
+import android.content.ContentValues;
+import android.nfc.Tag;
+import android.util.Log;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,11 +21,15 @@ public class HomeworkEntity {
     private Date entryDate;
     private String subject;
 
-    public HomeworkEntity(String subject, String entryDate, String dueDate, String content) throws ParseException {
-        this.subject = subject;
-        this.entryDate = HomeworkEntity.FORMAT.parse(entryDate);
-        this.dueDate = HomeworkEntity.FORMAT.parse(dueDate);
-        this.content = content;
+    public HomeworkEntity(String subject, String entryDate, String dueDate, String content) {
+        try {
+            this.subject = subject;
+            this.entryDate = HomeworkEntity.FORMAT.parse(entryDate);
+            this.dueDate = HomeworkEntity.FORMAT.parse(dueDate);
+            this.content = content;
+        } catch (ParseException pe) {
+            Log.d(ContentValues.TAG, pe.getMessage());
+        }
     }
 
     public String getContent() {

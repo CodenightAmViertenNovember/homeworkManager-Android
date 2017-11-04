@@ -79,7 +79,13 @@ public class GetHomeworkPresenter implements Presenter {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot classSnapshot : dataSnapshot.getChildren()) {
-                    HomeworkEntity subj
+                    DataSnapshot homeworkSnapshot = classSnapshot.child("homework");
+                    HomeworkEntity homeworkEntity = new HomeworkEntity(
+                            homeworkSnapshot.child("subject").getValue().toString(),
+                            homeworkSnapshot.child("entrydate").getValue().toString(),
+                            homeworkSnapshot.child("duedate").getValue().toString(),
+                            homeworkSnapshot.child("content").getValue().toString()
+                    );
 
                     classEntityArrayList.add(new ClassEntity(
                             homeworkEntity,
