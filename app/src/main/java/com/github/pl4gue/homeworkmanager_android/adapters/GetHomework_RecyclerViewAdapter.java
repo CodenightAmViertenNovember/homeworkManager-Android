@@ -7,8 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.github.pl4gue.R;
-import com.github.pl4gue.data.entity.HomeWorkEntry;
+
+import com.github.pl4gue.homeworkmanager_android.R;
+import com.github.pl4gue.homeworkmanager_android.entity.HomeWorkEntry;
 
 import java.util.List;
 

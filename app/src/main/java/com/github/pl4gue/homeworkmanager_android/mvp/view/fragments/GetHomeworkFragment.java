@@ -1,9 +1,6 @@
 package com.github.pl4gue.homeworkmanager_android.mvp.view.fragments;
 
-import android.accounts.AccountManager;
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -21,8 +18,6 @@ import com.github.pl4gue.homeworkmanager_android.mvp.presenter.GetHomeworkPresen
 import com.github.pl4gue.homeworkmanager_android.mvp.view.GetHomeworkView;
 import com.github.pl4gue.homeworkmanager_android.mvp.view.activity.BaseActivity;
 import com.github.pl4gue.homeworkmanager_android.mvp.view.util.DividerItemDecoration;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-
 
 import java.util.List;
 
@@ -36,8 +31,6 @@ import butterknife.ButterKnife;
  */
 
 public class GetHomeworkFragment extends Fragment implements GetHomeworkView {
-
-    GoogleAccountCredential mCredential;
 
     BaseActivity activity;
 
@@ -65,87 +58,40 @@ public class GetHomeworkFragment extends Fragment implements GetHomeworkView {
         mGetHomeworkPresenter = new GetHomeworkPresenter();
 
         BaseActivity.DialogManagers.ProgressDialogManager.setUpProgressDialog(activity);
-        mGetHomeworkPresenter.initialize(this,mHomeworkLinearLayout);
+        mGetHomeworkPresenter.initialize(this, mHomeworkLinearLayout);
 
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(activity);
         mHomeworkListRecyclerView.setLayoutManager(mLayoutManager);
-        mHomeworkListRecyclerView.addItemDecoration(new DividerItemDecoration(ContextCompat.getDrawable(getApplicationContext(), R.drawable.divider)));
-        mAdapter = new GetHomework_RecyclerViewAdapter(mHomeworkList, this);
+        mHomeworkListRecyclerView.addItemDecoration(new DividerItemDecoration(ContextCompat.getDrawable(activity.getApplicationContext(), R.drawable.divider)));
+        mAdapter = new GetHomework_RecyclerViewAdapter(mHomeworkList, activity);
         mHomeworkListRecyclerView.setAdapter(mAdapter);
 
         mGetHomeworkPresenter.update();
+
+        return root;
     }
 
     @Override
     public void displayLoadingScreen() {
-        DialogManagers.ProgressDialogManager.startProgressDialog(getString(R.string.loading));
+        BaseActivity.DialogManagers.ProgressDialogManager.startProgressDialog(getString(R.string.loading));
     }
 
     @Override
     public void hideLoadingScreen() {
-        DialogManagers.ProgressDialogManager.stopProgressDialog();
+        BaseActivity.DialogManagers.ProgressDialogManager.stopProgressDialog();
     }
 
     @Override
-    public void updateGSheetsResult(List<HomeWorkEntry> homeWorkEntryList) {
+    public void updateDatabase(List<HomeWorkEntry> homeWorkEntryList) {
         mHomeworkList = homeWorkEntryList;
-        mAdapter = new GetHomework_RecyclerViewAdapter(mHomeworkList, this);
+        mAdapter = new GetHomework_RecyclerViewAdapter(mHomeworkList, activity);
         mHomeworkListRecyclerView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
     }
+
 
     @Override
     public void fetchDataError() {
     }
 
-    /**
-     * Called when an activity launched here (specifically, AccountPicker
-     * and authorization) exits, giving you the requestCode you started it with,
-     * the resultCode it returned, and any additional data from it.
-     *
-     * @param requestCode code indicating which activity result is incoming.
-     * @param resultCode  code indicating the result of the incoming
-     *                    activity result.
-     * @param data        Intent (containing result data) returned by incoming
-     *                    activity result.
-     */
-    @Override
-    protected void onActivityResult(
-            int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case REQUEST_GOOGLE_PLAY_SERVICES:
-                if (resultCode != RESULT_OK) {
-                    showError(
-                            "This app requires Google Play Services. Please install " +
-                                    "Google Play Services on your device and relaunch this app.", this);
-                } else {
-                    mGetHomeworkPresenter.update();
-                }
-                break;
-            case REQUEST_ACCOUNT_PICKER:
-                if (resultCode == RESULT_OK && data != null &&
-                        data.getExtras() != null) {
-                    String accountName =
-                            data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-                    if (accountName != null) {
-                        SharedPreferences settings =
-                                getPreferences(Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = settings.edit();
-                        editor.putString(PREF_ACCOUNT_NAME, accountName);
-                        editor.apply();
-                        mCredential.setSelectedAccountName(accountName);
-                        mGetHomeworkPresenter.update();
-                    }
-                }
-                break;
-            case REQUEST_AUTHORIZATION:
-                if (resultCode == RESULT_OK) {
-                    mGetHomeworkPresenter.update();
-                }
-                break;
-            default:
-                showError("Unknown Error", this);
-        }
-    }
 }

@@ -22,11 +22,11 @@ import java.util.HashMap;
 import java.util.List;
 
 import static android.content.ContentValues.TAG;
-import static com.github.pl4gue.homeworkmanager_android.GSheetConstants.KEY_HOMEWORK;
-import static com.github.pl4gue.homeworkmanager_android.GSheetConstants.KEY_HOMEWORK_COMMENTS;
-import static com.github.pl4gue.homeworkmanager_android.GSheetConstants.KEY_HOMEWORK_DUE;
-import static com.github.pl4gue.homeworkmanager_android.GSheetConstants.KEY_HOMEWORK_ENTRY;
-import static com.github.pl4gue.homeworkmanager_android.GSheetConstants.KEY_HOMEWORK_SUBJECT;
+import static com.github.pl4gue.homeworkmanager_android.FirebaseConstants.KEY_HOMEWORK;
+import static com.github.pl4gue.homeworkmanager_android.FirebaseConstants.KEY_HOMEWORK_COMMENTS;
+import static com.github.pl4gue.homeworkmanager_android.FirebaseConstants.KEY_HOMEWORK_DUE;
+import static com.github.pl4gue.homeworkmanager_android.FirebaseConstants.KEY_HOMEWORK_ENTRY;
+import static com.github.pl4gue.homeworkmanager_android.FirebaseConstants.KEY_HOMEWORK_SUBJECT;
 
 
 /**
@@ -57,15 +57,20 @@ public class GetHomeworkPresenter implements Presenter {
         mUserDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                    String[] classes = userSnapshot.child("classList").getValue().toString().trim().split(",");
-                    userEntityArrayList.add(new UserEntity(
-                            userSnapshot.child("id").getValue().toString(),
-                            userSnapshot.child("name").getValue().toString(),
-                            userSnapshot.child("role").getValue().toString(),
-                            Arrays.asList(classes),
-                            userSnapshot.child("password").getValue().toString()
-                    ));
+                if (dataSnapshot.exists()) {
+                    userEntityArrayList.clear();
+
+                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                        String[] classes = userSnapshot.child("classList").getValue().toString().trim().split(",");
+                        userEntityArrayList.add(new UserEntity(
+                                userSnapshot.child("id").getValue().toString(),
+                                userSnapshot.child("name").getValue().toString(),
+                                userSnapshot.child("role").getValue().toString(),
+                                Arrays.asList(classes),
+                                userSnapshot.child("password").getValue().toString()
+                        ));
+                    }
+                    update();
                 }
             }
 
@@ -78,20 +83,29 @@ public class GetHomeworkPresenter implements Presenter {
         mClassesDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot classSnapshot : dataSnapshot.getChildren()) {
-                    DataSnapshot homeworkSnapshot = classSnapshot.child("homework");
-                    HomeworkEntity homeworkEntity = new HomeworkEntity(
-                            homeworkSnapshot.child("subject").getValue().toString(),
-                            homeworkSnapshot.child("entrydate").getValue().toString(),
-                            homeworkSnapshot.child("duedate").getValue().toString(),
-                            homeworkSnapshot.child("content").getValue().toString()
-                    );
+                if(dataSnapshot.exists()) {
+                    classEntityArrayList.clear();
 
-                    classEntityArrayList.add(new ClassEntity(
-                            homeworkEntity,
-                            classSnapshot.child("id").getValue().toString(),
-                            classSnapshot.child("name").getValue().toString()
-                    ));
+                    for (DataSnapshot classSnapshot : dataSnapshot.getChildren()) {
+                        DataSnapshot homeworkEntityListSnapshot = classSnapshot.child("homework");
+
+                        ArrayList<HomeworkEntity> homeworkEntityArrayList = new ArrayList<>();
+                        for (DataSnapshot homeworkSnapshot : homeworkEntityListSnapshot.getChildren()) {
+                            homeworkEntityArrayList.add(new HomeworkEntity(
+                                    homeworkSnapshot.child("subject").getValue().toString(),
+                                    homeworkSnapshot.child("entrydate").getValue().toString(),
+                                    homeworkSnapshot.child("duedate").getValue().toString(),
+                                    homeworkSnapshot.child("content").getValue().toString()
+                            ));
+                        }
+
+                        classEntityArrayList.add(new ClassEntity(
+                                homeworkEntityArrayList,
+                                classSnapshot.child("id").getValue().toString(),
+                                classSnapshot.child("name").getValue().toString()
+                        ));
+                        update();
+                    }
                 }
             }
 
@@ -104,7 +118,6 @@ public class GetHomeworkPresenter implements Presenter {
     }
 
     public void update() {
-
     }
 
     private void showNext(List<HomeWorkEntry> homeWorkEntryList) {

@@ -15,6 +15,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.github.pl4gue.homeworkmanager_android.mvp.view.fragments.GetHomeworkFragment;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -85,7 +87,7 @@ public class MainActivity extends AppCompatActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         if (id == R.id.nav_file) {
-            fragment = new HomeFragment();
+            fragment = new GetHomeworkFragment();
             fragmentManager.beginTransaction().replace(R.id.content_main, fragment).commit();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

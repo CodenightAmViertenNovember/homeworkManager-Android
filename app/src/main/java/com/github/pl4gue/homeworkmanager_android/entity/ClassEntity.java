@@ -12,8 +12,8 @@ public class ClassEntity {
     private int id;
     private String name;
 
-    public ClassEntity(List<HomeworkEntity> homework, int id, String name) {
-        this.id = id;
+    public ClassEntity(List<HomeworkEntity> homework, String id, String name) {
+        this.id = Integer.parseInt(id);
         this.homework = homework;
         this.name = name;
     }

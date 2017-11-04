@@ -10,7 +10,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.github.pl4gue.R;
+
+import com.github.pl4gue.homeworkmanager_android.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
