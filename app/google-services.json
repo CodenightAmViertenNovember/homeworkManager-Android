@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "584928016838",
+    "firebase_url": "https://tidal-airway-182817.firebaseio.com",
+    "project_id": "tidal-airway-182817",
+    "storage_bucket": "tidal-airway-182817.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:584928016838:android:acb482812bb099b8",
+        "android_client_info": {
+          "package_name": "com.github.pl4gue.homeworkmanager_android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "584928016838-r5341uka3eokck1r265ap3bg30e0ahc6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgibgClzniiHK5288VfkJ8JLCPdRIWEFU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
