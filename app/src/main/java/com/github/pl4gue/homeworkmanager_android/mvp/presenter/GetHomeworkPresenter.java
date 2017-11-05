@@ -9,7 +9,6 @@ import com.github.pl4gue.homeworkmanager_android.entity.HomeworkEntity;
 import com.github.pl4gue.homeworkmanager_android.entity.UserEntity;
 import com.github.pl4gue.homeworkmanager_android.mvp.view.GetHomeworkView;
 import com.github.pl4gue.homeworkmanager_android.mvp.view.fragments.GetHomeworkFragment;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,8 +34,6 @@ import static com.github.pl4gue.homeworkmanager_android.FirebaseConstants.KEY_HO
  */
 
 public class GetHomeworkPresenter implements Presenter {
-    private GoogleAccountCredential mCredential;
-
     private GetHomeworkView mView;
     private GetHomeworkFragment context;
 

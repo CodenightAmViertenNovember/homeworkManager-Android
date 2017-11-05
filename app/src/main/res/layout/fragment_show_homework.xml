@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-    tools:context=".">
+    tools:context=".mvp.view.fragments.GetHomeworkFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/getHomeworkRecyclerView"
